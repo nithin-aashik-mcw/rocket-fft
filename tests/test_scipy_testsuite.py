@@ -28,17 +28,33 @@ from numpy.testing import (
     assert_equal,
 )
 from pytest import raises as assert_raises
-from scipy.fft._pocketfft.realtransforms import (
-    dct,
-    dctn,
-    dst,
-    dstn,
-    idct,
-    idctn,
-    idst,
-    idstn,
-)
-from scipy.fft._pocketfft.tests.test_real_transforms import fftpack_test_dir
+from numpy.lib import NumpyVersion
+
+# SciPy releases after 1.17.1 replaced the private _pocketfft backend with _duccfft
+if NumpyVersion(scipy.__version__) > "1.17.1":
+    from scipy.fft._duccfft.realtransforms import (
+        dct,
+        dctn,
+        dst,
+        dstn,
+        idct,
+        idctn,
+        idst,
+        idstn,
+    )
+    from scipy.fft._duccfft.tests.test_real_transforms import fftpack_test_dir
+else:
+    from scipy.fft._pocketfft.realtransforms import (
+        dct,
+        dctn,
+        dst,
+        dstn,
+        idct,
+        idctn,
+        idst,
+        idstn,
+    )
+    from scipy.fft._pocketfft.tests.test_real_transforms import fftpack_test_dir
 
 set_numba_capture_errors_new_style()
 

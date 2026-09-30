@@ -1,17 +1,26 @@
 name: Build and test
 
-on: [push, pull_request]
+on: [push, pull_request, workflow_dispatch]
 
 jobs:
   tests:
     if: |
       github.event_name == 'push' && contains(github.event.head_commit.message, '[run-tests]') ||
-      github.event_name == 'pull_request'
+      github.event_name == 'pull_request' ||
+      github.event_name == 'workflow_dispatch'
     strategy:
       fail-fast: false
       matrix:
         python-version: ["3.9", "3.10", "3.11", "3.12", "3.13", "3.14"]
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest, windows-latest, windows-11-arm, macos-latest]
+        # numba/llvmlite have no win_arm64 wheels below Python 3.12
+        exclude:
+          - os: windows-11-arm
+            python-version: "3.9"
+          - os: windows-11-arm
+            python-version: "3.10"
+          - os: windows-11-arm
+            python-version: "3.11"
 
     runs-on: ${{ matrix.os }}
 

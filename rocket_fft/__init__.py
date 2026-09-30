@@ -1,3 +1,7 @@
+from ._platform import use_generic_cpu_on_windows_arm64
+
+use_generic_cpu_on_windows_arm64()
+
 from . import pocketfft
 from ._version import __version__
 from .overloads import (
